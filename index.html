@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>დაბადების დღის Countdown</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-wrapper label {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .input-wrapper select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            color: #333;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper select:hover {
+            border-color: #667eea;
+        }
+
+        .input-wrapper select:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 28px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #fadbd8;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: #27ae60;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #d5f4e6;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .countdown-container {
+            display: none;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .countdown-container.active {
+            display: block;
+        }
+
+        .birth-info {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .countdown-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 10px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .countdown-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .countdown-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .age-display {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        .age-display span {
+            display: block;
+            color: #333;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        /* რესპონსიული დიზაინი */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .countdown-grid {
+                grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+                gap: 10px;
+            }
+
+            .countdown-number {
+                font-size: 2em;
+            }
+
+            .countdown-item {
+                padding: 15px 8px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .countdown-grid {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                gap: 8px;
+            }
+
+            .countdown-number {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎂 დაბადების დღის Countdown</h1>
+            <p>აირჩიეთ თქვენი დაბადების დღის თარიღი</p>
+        </div>
+
+        <!-- შეცდომის შეტყობინება -->
+        <div class="error-message" id="errorMessage"></div>
+
+        <!-- წარმატების შეტყობინება -->
+        <div class="success-message" id="successMessage"></div>
+
+        <!-- ფორმა -->
+        <div id="formSection">
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <label for="yearSelect">წელი</label>
+                    <select id="yearSelect">
+                        <option value=""> აირჩიეთ წელი </option>
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <label for="monthSelect">თვე</label>
+                    <select id="monthSelect">
+                        <option value=""> აირჩიეთ თვე </option>
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <label for="daySelect">დღე</label>
+                    <select id="daySelect">
+                        <option value=""> აირჩიეთ დღე </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="calculateBtn">გამოთვლა</button>
+                <button class="btn-reset" id="resetBtn">თავიდან</button>
+            </div>
+        </div>
+
+        <!-- Countdown ჩვენება -->
+        <div class="countdown-container" id="countdownContainer">
+            <div class="birth-info" id="birthInfo"></div>
+
+            <div class="countdown-grid" id="countdownGrid">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="months">0</div>
+                    <div class="countdown-label">თვე</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">0</div>
+                    <div class="countdown-label">დღე</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">0</div>
+                    <div class="countdown-label">საათი</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">0</div>
+                    <div class="countdown-label">წუთი</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">0</div>
+                    <div class="countdown-label">წამი</div>
+                </div>
+            </div>
+
+            <div class="age-display">
+                თქვენი ასაკი:
+                <span id="ageDisplay"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // თვეების სახელები ქართულად
+        // =====================================================
+        const monthsGeorgian = [
+            'იანვარი', 'თებერვალი', 'მარტი', 'აპრილი',
+            'მაისი', 'ივნისი', 'ივლისი', 'აგვისტო',
+            'სექტემბერი', 'ოქტომბერი', 'ნოემბერი', 'დეკემბერი'
+        ];
+
+        // =====================================================
+        // DOM ელემენტების მიღება
+        // =====================================================
+        const yearSelect = document.getElementById('yearSelect');
+        const monthSelect = document.getElementById('monthSelect');
+        const daySelect = document.getElementById('daySelect');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const countdownContainer = document.getElementById('countdownContainer');
+        const birthInfo = document.getElementById('birthInfo');
+        const ageDisplay = document.getElementById('ageDisplay');
+
+        let countdownInterval = null;
+
+        // =====================================================
+        // წელიების ბოქსის შევსება (1950 - დღეს + 20 წელი)
+        // =====================================================
+        function populateYears() {
+            const currentYear = new Date().getFullYear();
+            for (let year = 1950; year <= currentYear; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // =====================================================
+        // თვეების ბოქსის შევსება
+        // =====================================================
+        function populateMonths() {
+            monthsGeorgian.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+        }
+
+        // =====================================================
+        // დღეების რაოდენობის გამოთვლა აირჩეული თვისთვის
+        // =====================================================
+        function getDaysInMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        // =====================================================
+        // დღეების ბოქსის განახლება თვისა და წლის შეცვლისას
+        // =====================================================
+        function populateDays() {
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+
+            daySelect.innerHTML = '<option value=""> აირჩიეთ დღე </option>';
+
+            if (!year || !month) {
+                return;
+            }
+
+            const daysCount = getDaysInMonth(year, month);
+
+            for (let day = 1; day <= daysCount; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day;
+                daySelect.appendChild(option);
+            }
+        }
+
+        // =====================================================
+        // შეცდომის შეტყობინების ჩვენება
+        // =====================================================
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            successMessage.classList.remove('show');
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        // =====================================================
+        // წარმატების შეტყობინების ჩვენება
+        // =====================================================
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.classList.add('show');
+            errorMessage.classList.remove('show');
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        // =====================================================
+        // თავიდან დაწყება
+        // =====================================================
+        function resetForm() {
+            yearSelect.value = '';
+            monthSelect.value = '';
+            daySelect.value = '';
+            daySelect.innerHTML = '<option value=""> აირჩიეთ დღე </option>';
+            countdownContainer.classList.remove('active');
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Countdown-ის გაჩერება
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+
+        // =====================================================
+        // თარიღის ვალიდაცია
+        // =====================================================
+        function validateDate() {
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const day = parseInt(daySelect.value);
+
+            if (!year || !month || !day) {
+                showError('⚠️ გთხოვთ აირჩიეთ დაბადების წელი, თვე და დღე');
+                return false;
+            }
+
+            // თარიღის ვალიდაცია
+            const birthDate = new Date(year, month - 1, day);
+            if (birthDate.getFullYear() !== year || 
+                birthDate.getMonth() !== month - 1 || 
+                birthDate.getDate() !== day) {
+                showError('⚠️ არასწორი თარიღი. სცადეთ ხელახლა');
+                return false;
+            }
+
+            // გაჩეკეთ რომ დაბადების თარიღი წარსულში არ იყოს
+            if (birthDate > new Date()) {
+                showError('⚠️ დაბადების თარიღი არ შეიძლება ომის დროსაც ხდეს');
+                return false;
+            }
+
+            return true;
+        }
+
+        // =====================================================
+        // მომხმარებლის ასაკის გამოთვლა (წლები, თვეები, დღეები)
+        // =====================================================
+        function calculateAge(year, month, day) {
+            const today = new Date();
+            const birthDate = new Date(year, month - 1, day);
+
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let monthDiff = today.getMonth() - birthDate.getMonth();
+            let dayDiff = today.getDate() - birthDate.getDate();
+
+            // თუ თვე ჯერ არ არის ამ სააკის საფარი, ასაკი მეკობს 1 წლით
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                age--;
+                monthDiff = 12 + monthDiff;
+            }
+
+            // თუ დღე არ არის ამ სააკის საფარი
+            if (dayDiff < 0) {
+                monthDiff--;
+                const prevMonthLastDay = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                dayDiff = prevMonthLastDay + dayDiff;
+            }
+
+            return { years: age, months: monthDiff, days: dayDiff };
+        }
+
+        // =====================================================
+        // შემდეგი დაბადების დღემდე დარჩენილი დროის გამოთვლა
+        // =====================================================
+        function calculateTimeUntilNextBirthday(year, month, day) {
+            const today = new Date();
+            let nextBirthday = new Date(today.getFullYear(), month - 1, day);
+
+            // თუ დაბადების დღე ამ წელს უკვე გადაეს
+            if (nextBirthday < today) {
+                nextBirthday = new Date(today.getFullYear() + 1, month - 1, day);
+            }
+
+            const timeDifference = nextBirthday - today;
+
+            // წამი
+            const seconds = Math.floor((timeDifference / 1000) % 60);
+            // წუთი
+            const minutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+            // საათი
+            const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+            // დღე
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+            // თვეების გამოთვლა დღეების საფუძველზე (საშუალოდ 30.44 დღე თვეში)
+            const months = Math.floor(days / 30.44);
+            const remainingDays = Math.floor(days % 30.44);
+
+            return { months, days: remainingDays, hours, minutes, seconds };
+        }
+
+        // =====================================================
+        // Countdown-ის გამოთვლა და განახლება
+        // =====================================================
+        function updateCountdown() {
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const day = parseInt(daySelect.value);
+
+            const countdown = calculateTimeUntilNextBirthday(year, month, day);
+
+            // DOM-ის განახლება
+            document.getElementById('months').textContent = countdown.months;
+            document.getElementById('days').textContent = countdown.days;
+            document.getElementById('hours').textContent = countdown.hours;
+            document.getElementById('minutes').textContent = countdown.minutes;
+            document.getElementById('seconds').textContent = countdown.seconds;
+        }
+
+        // =====================================================
+        // Countdown-ის დაწყება
+        // =====================================================
+        function startCountdown() {
+            if (!validateDate()) {
+                return;
+            }
+
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const day = parseInt(daySelect.value);
+
+            // ფორმის გახშირება
+            document.getElementById('formSection').style.display = 'none';
+
+            // Countdown-ის ჩვენება
+            countdownContainer.classList.add('active');
+
+            // დაბადების ინფორმაციის განახლება
+            birthInfo.textContent = `დაბადების თარიღი: ${day} ${monthsGeorgian[month - 1]} ${year}`;
+
+            // ასაკის ჩვენება
+            const age = calculateAge(year, month, day);
+            ageDisplay.textContent = `${age.years} წელი, ${age.months} თვე, ${age.days} დღე`;
+
+            // პირველი განახლება დაუყოვნებლივ
+            updateCountdown();
+
+            // წინა Interval გაჩერება (თუ ხელახლა გაითვლა)
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            // Countdown-ის განახლება ყოველ წამში
+            countdownInterval = setInterval(updateCountdown, 1000);
+
+            showSuccess('✅ დაბადების დღის Countdown დაიწყო!');
+        }
+
+        // =====================================================
+        // ღირებული ლოდ ლოდ
+        // =====================================================
+        function hideForm() {
+            if (countdownContainer.classList.contains('active')) {
+                document.getElementById('formSection').style.display = 'none';
+            } else {
+                document.getElementById('formSection').style.display = 'block';
+            }
+        }
+
+        // =====================================================
+        // ღირებულობების შემოწმება სახელის განსაზღვრის დროს
+        // =====================================================
+        function onReset() {
+            resetForm();
+            document.getElementById('formSection').style.display = 'block';
+        }
+
+        // =====================================================
+        // ღირებული ფორმის ჩამონთვლა
+        // =====================================================
+        populateYears();
+        populateMonths();
+
+        // =====================================================
+        // Event Listeners
+        // =====================================================
+        yearSelect.addEventListener('change', populateDays);
+        monthSelect.addEventListener('change', populateDays);
+        calculateBtn.addEventListener('click', startCountdown);
+        resetBtn.addEventListener('click', onReset);
+
+        // =====================================================
+        // Enter კლავიშის დაჭერისას Countdown-ის დაწყება
+        // =====================================================
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && countdownContainer.classList.contains('active') === false) {
+                startCountdown();
+            }
+        });
+    </script>
+</body>
+</html>
