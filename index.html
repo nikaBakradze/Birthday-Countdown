@@ -213,8 +213,6 @@
             margin-top: 10px;
             font-size: 1.1em;
         }
-
-        /* რესპონსიული დიზაინი */
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
@@ -269,13 +267,9 @@
             <p>აირჩიეთ თქვენი დაბადების დღის თარიღი</p>
         </div>
 
-        <!-- შეცდომის შეტყობინება -->
         <div class="error-message" id="errorMessage"></div>
-
-        <!-- წარმატების შეტყობინება -->
         <div class="success-message" id="successMessage"></div>
-
-        <!-- ფორმა -->
+        
         <div id="formSection">
             <div class="form-group">
                 <div class="input-wrapper">
@@ -304,7 +298,6 @@
             </div>
         </div>
 
-        <!-- Countdown ჩვენება -->
         <div class="countdown-container" id="countdownContainer">
             <div class="birth-info" id="birthInfo"></div>
 
@@ -339,18 +332,14 @@
     </div>
 
     <script>
-        // =====================================================
-        // თვეების სახელები ქართულად
-        // =====================================================
+      
         const monthsGeorgian = [
             'იანვარი', 'თებერვალი', 'მარტი', 'აპრილი',
             'მაისი', 'ივნისი', 'ივლისი', 'აგვისტო',
             'სექტემბერი', 'ოქტომბერი', 'ნოემბერი', 'დეკემბერი'
         ];
 
-        // =====================================================
-        // DOM ელემენტების მიღება
-        // =====================================================
+
         const yearSelect = document.getElementById('yearSelect');
         const monthSelect = document.getElementById('monthSelect');
         const daySelect = document.getElementById('daySelect');
@@ -364,9 +353,6 @@
 
         let countdownInterval = null;
 
-        // =====================================================
-        // წელიების ბოქსის შევსება (1950 - დღეს + 20 წელი)
-        // =====================================================
         function populateYears() {
             const currentYear = new Date().getFullYear();
             for (let year = 1950; year <= currentYear; year++) {
@@ -377,9 +363,6 @@
             }
         }
 
-        // =====================================================
-        // თვეების ბოქსის შევსება
-        // =====================================================
         function populateMonths() {
             monthsGeorgian.forEach((month, index) => {
                 const option = document.createElement('option');
@@ -389,16 +372,10 @@
             });
         }
 
-        // =====================================================
-        // დღეების რაოდენობის გამოთვლა აირჩეული თვისთვის
-        // =====================================================
         function getDaysInMonth(year, month) {
             return new Date(year, month, 0).getDate();
         }
 
-        // =====================================================
-        // დღეების ბოქსის განახლება თვისა და წლის შეცვლისას
-        // =====================================================
         function populateDays() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -419,9 +396,7 @@
             }
         }
 
-        // =====================================================
-        // შეცდომის შეტყობინების ჩვენება
-        // =====================================================
+      
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.classList.add('show');
@@ -431,9 +406,7 @@
             }, 5000);
         }
 
-        // =====================================================
-        // წარმატების შეტყობინების ჩვენება
-        // =====================================================
+      
         function showSuccess(message) {
             successMessage.textContent = message;
             successMessage.classList.add('show');
@@ -443,9 +416,7 @@
             }, 5000);
         }
 
-        // =====================================================
-        // თავიდან დაწყება
-        // =====================================================
+      
         function resetForm() {
             yearSelect.value = '';
             monthSelect.value = '';
@@ -462,9 +433,7 @@
             }
         }
 
-        // =====================================================
-        // თარიღის ვალიდაცია
-        // =====================================================
+      
         function validateDate() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -484,7 +453,7 @@
                 return false;
             }
 
-            // გაჩეკეთ რომ დაბადების თარიღი წარსულში არ იყოს
+          
             if (birthDate > new Date()) {
                 showError('⚠️ დაბადების თარიღი არ შეიძლება ომის დროსაც ხდეს');
                 return false;
@@ -493,9 +462,6 @@
             return true;
         }
 
-        // =====================================================
-        // მომხმარებლის ასაკის გამოთვლა (წლები, თვეები, დღეები)
-        // =====================================================
         function calculateAge(year, month, day) {
             const today = new Date();
             const birthDate = new Date(year, month - 1, day);
@@ -504,13 +470,11 @@
             let monthDiff = today.getMonth() - birthDate.getMonth();
             let dayDiff = today.getDate() - birthDate.getDate();
 
-            // თუ თვე ჯერ არ არის ამ სააკის საფარი, ასაკი მეკობს 1 წლით
             if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                 age--;
                 monthDiff = 12 + monthDiff;
             }
 
-            // თუ დღე არ არის ამ სააკის საფარი
             if (dayDiff < 0) {
                 monthDiff--;
                 const prevMonthLastDay = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
@@ -520,14 +484,10 @@
             return { years: age, months: monthDiff, days: dayDiff };
         }
 
-        // =====================================================
-        // შემდეგი დაბადების დღემდე დარჩენილი დროის გამოთვლა
-        // =====================================================
         function calculateTimeUntilNextBirthday(year, month, day) {
             const today = new Date();
             let nextBirthday = new Date(today.getFullYear(), month - 1, day);
 
-            // თუ დაბადების დღე ამ წელს უკვე გადაეს
             if (nextBirthday < today) {
                 nextBirthday = new Date(today.getFullYear() + 1, month - 1, day);
             }
@@ -550,9 +510,6 @@
             return { months, days: remainingDays, hours, minutes, seconds };
         }
 
-        // =====================================================
-        // Countdown-ის გამოთვლა და განახლება
-        // =====================================================
         function updateCountdown() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -568,9 +525,6 @@
             document.getElementById('seconds').textContent = countdown.seconds;
         }
 
-        // =====================================================
-        // Countdown-ის დაწყება
-        // =====================================================
         function startCountdown() {
             if (!validateDate()) {
                 return;
@@ -607,9 +561,6 @@
             showSuccess('✅ დაბადების დღის Countdown დაიწყო!');
         }
 
-        // =====================================================
-        // ღირებული ლოდ ლოდ
-        // =====================================================
         function hideForm() {
             if (countdownContainer.classList.contains('active')) {
                 document.getElementById('formSection').style.display = 'none';
@@ -617,32 +568,19 @@
                 document.getElementById('formSection').style.display = 'block';
             }
         }
-
-        // =====================================================
-        // ღირებულობების შემოწმება სახელის განსაზღვრის დროს
-        // =====================================================
         function onReset() {
             resetForm();
             document.getElementById('formSection').style.display = 'block';
         }
-
-        // =====================================================
-        // ღირებული ფორმის ჩამონთვლა
-        // =====================================================
         populateYears();
         populateMonths();
 
-        // =====================================================
-        // Event Listeners
-        // =====================================================
+     
         yearSelect.addEventListener('change', populateDays);
         monthSelect.addEventListener('change', populateDays);
         calculateBtn.addEventListener('click', startCountdown);
         resetBtn.addEventListener('click', onReset);
 
-        // =====================================================
-        // Enter კლავიშის დაჭერისას Countdown-ის დაწყება
-        // =====================================================
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && countdownContainer.classList.contains('active') === false) {
                 startCountdown();
@@ -651,3 +589,4 @@
     </script>
 </body>
 </html>
+
