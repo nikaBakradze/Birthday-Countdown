@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>დაბადების დღის Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,12 +14,69 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            padding-top: 110px;
+            background-size: 400% 400%;
+            animation: bgcolor 12s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(240, 147, 251, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(79, 172, 254, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 30%, rgba(102, 126, 234, 0.3) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes bgcolor {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 0%;
+            }
+            75% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(30px, -50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(-30px, 30px) rotate(180deg);
+            }
+            75% {
+                transform: translate(50px, 50px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
         }
 
         .container {
@@ -213,6 +271,8 @@
             margin-top: 10px;
             font-size: 1.1em;
         }
+
+        /* რესპონსიული დიზაინი */
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
@@ -258,18 +318,129 @@
                 font-size: 1.6em;
             }
         }
+
+        .top-links {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: calc(100% - 60px);
+            max-width: 980px;
+            padding: 18px 30px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 12px 40px rgba(6,8,25,0.18);
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.04rem;
+            font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.42);
+        }
+
+        .top-links .creator {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.08rem;
+        }
+
+        .top-links .follow-text {
+            color: rgba(255,255,255,0.88);
+            font-size: 0.98rem;
+        }
+
+        .top-links .top-socials {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .top-links a svg {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 0;
+            fill: currentColor;
+        }
+
+        .top-links a {
+            margin: 0 6px;
+            padding: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 600;
+            color: #fff; /* white icons */
+            background: linear-gradient(135deg, rgba(74,108,247,0.12), rgba(74,108,247,0.08));
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(74,108,247,0.12);
+            transition: all 0.18s ease;
+        }
+
+        .top-links a:hover {
+            background: linear-gradient(135deg, rgba(74,108,247,0.20), rgba(74,108,247,0.12));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(6,8,25,0.16);
+        }
+
+        .top-links a:focus {
+            outline: 2px solid rgba(74,108,247,0.18);
+            outline-offset: 2px;
+        }
+
+        .author-box {
+            margin-bottom: 20px;
+            padding: 14px;
+            border: 1px solid #e6e6e6;
+            border-radius: 12px;
+            background: #fafafa;
+            text-align: center;
+            color: #333;
+            font-size: 0.95em;
+        }
     </style>
 </head>
 <body>
+    <div class="top-links">
+        <div class="creator"><h2>website creator : ნიკა ბაქრაძე🫡</h2></div>
+        <div class="follow-text"><h3>გამომყევი სოციალურ ქსელებში👇</h3></div>
+        <div class="top-socials">
+            <a href="https://www.facebook.com/Nika.bakradze0" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.06 5.66 21.17 10.44 21.93v-6.9H7.9v-2.86h2.54V9.41c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.77l-.44 2.86h-2.33v6.9C18.34 21.17 22 17.06 22 12.07z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/_nbakradzeee/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm4.5-.9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+            </a>
+
+            <a href="https://www.linkedin.com/in/nika-bakradze-aba496387/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.1 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4zM9 8h3.6v2.2h.05c.5-.95 1.7-1.95 3.5-1.95 3.75 0 4.45 2.47 4.45 5.68V24h-4V15.6c0-2.01-.04-4.6-2.8-4.6-2.8 0-3.2 2.15-3.2 4.44V24H9z"/></svg>
+            </a>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>🎂 დაბადების დღის Countdown</h1>
             <p>აირჩიეთ თქვენი დაბადების დღის თარიღი</p>
         </div>
 
+        <!-- შეცდომის შეტყობინება -->
         <div class="error-message" id="errorMessage"></div>
+
+        <!-- წარმატების შეტყობინება -->
         <div class="success-message" id="successMessage"></div>
-        
+
+        <!-- ფორმა -->
         <div id="formSection">
             <div class="form-group">
                 <div class="input-wrapper">
@@ -298,6 +469,7 @@
             </div>
         </div>
 
+        <!-- Countdown ჩვენება -->
         <div class="countdown-container" id="countdownContainer">
             <div class="birth-info" id="birthInfo"></div>
 
@@ -330,16 +502,15 @@
             </div>
         </div>
     </div>
-
     <script>
-      
+       
         const monthsGeorgian = [
             'იანვარი', 'თებერვალი', 'მარტი', 'აპრილი',
             'მაისი', 'ივნისი', 'ივლისი', 'აგვისტო',
             'სექტემბერი', 'ოქტომბერი', 'ნოემბერი', 'დეკემბერი'
         ];
 
-
+        
         const yearSelect = document.getElementById('yearSelect');
         const monthSelect = document.getElementById('monthSelect');
         const daySelect = document.getElementById('daySelect');
@@ -353,6 +524,9 @@
 
         let countdownInterval = null;
 
+        // =====================================================
+        // წელიების ბოქსის შევსება (1950 - დღეს + 20 წელი)
+        // =====================================================
         function populateYears() {
             const currentYear = new Date().getFullYear();
             for (let year = 1950; year <= currentYear; year++) {
@@ -363,6 +537,9 @@
             }
         }
 
+        // =====================================================
+        // თვეების ბოქსის შევსება
+        // =====================================================
         function populateMonths() {
             monthsGeorgian.forEach((month, index) => {
                 const option = document.createElement('option');
@@ -372,10 +549,16 @@
             });
         }
 
+        // =====================================================
+        // დღეების რაოდენობის გამოთვლა აირჩეული თვისთვის
+        // =====================================================
         function getDaysInMonth(year, month) {
             return new Date(year, month, 0).getDate();
         }
 
+        // =====================================================
+        // დღეების ბოქსის განახლება თვისა და წლის შეცვლისას
+        // =====================================================
         function populateDays() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -396,7 +579,9 @@
             }
         }
 
-      
+        // =====================================================
+        // შეცდომის შეტყობინების ჩვენება
+        // =====================================================
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.classList.add('show');
@@ -406,7 +591,9 @@
             }, 5000);
         }
 
-      
+        // =====================================================
+        // წარმატების შეტყობინების ჩვენება
+        // =====================================================
         function showSuccess(message) {
             successMessage.textContent = message;
             successMessage.classList.add('show');
@@ -416,7 +603,9 @@
             }, 5000);
         }
 
-      
+        // =====================================================
+        // თავიდან დაწყება
+        // =====================================================
         function resetForm() {
             yearSelect.value = '';
             monthSelect.value = '';
@@ -433,7 +622,9 @@
             }
         }
 
-      
+        // =====================================================
+        // თარიღის ვალიდაცია
+        // =====================================================
         function validateDate() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -453,7 +644,7 @@
                 return false;
             }
 
-          
+            // გაჩეკეთ რომ დაბადების თარიღი წარსულში არ იყოს
             if (birthDate > new Date()) {
                 showError('⚠️ დაბადების თარიღი არ შეიძლება ომის დროსაც ხდეს');
                 return false;
@@ -462,6 +653,9 @@
             return true;
         }
 
+        // =====================================================
+        // მომხმარებლის ასაკის გამოთვლა (წლები, თვეები, დღეები)
+        // =====================================================
         function calculateAge(year, month, day) {
             const today = new Date();
             const birthDate = new Date(year, month - 1, day);
@@ -470,11 +664,13 @@
             let monthDiff = today.getMonth() - birthDate.getMonth();
             let dayDiff = today.getDate() - birthDate.getDate();
 
+            // თუ თვე ჯერ არ არის ამ სააკის საფარი, ასაკი მეკობს 1 წლით
             if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                 age--;
                 monthDiff = 12 + monthDiff;
             }
 
+            // თუ დღე არ არის ამ სააკის საფარი
             if (dayDiff < 0) {
                 monthDiff--;
                 const prevMonthLastDay = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
@@ -484,10 +680,14 @@
             return { years: age, months: monthDiff, days: dayDiff };
         }
 
+        // =====================================================
+        // შემდეგი დაბადების დღემდე დარჩენილი დროის გამოთვლა
+        // =====================================================
         function calculateTimeUntilNextBirthday(year, month, day) {
             const today = new Date();
             let nextBirthday = new Date(today.getFullYear(), month - 1, day);
 
+            // თუ დაბადების დღე ამ წელს უკვე გადაეს
             if (nextBirthday < today) {
                 nextBirthday = new Date(today.getFullYear() + 1, month - 1, day);
             }
@@ -510,6 +710,9 @@
             return { months, days: remainingDays, hours, minutes, seconds };
         }
 
+        // =====================================================
+        // Countdown-ის გამოთვლა და განახლება
+        // =====================================================
         function updateCountdown() {
             const year = parseInt(yearSelect.value);
             const month = parseInt(monthSelect.value);
@@ -525,6 +728,9 @@
             document.getElementById('seconds').textContent = countdown.seconds;
         }
 
+        // =====================================================
+        // Countdown-ის დაწყება
+        // =====================================================
         function startCountdown() {
             if (!validateDate()) {
                 return;
@@ -575,12 +781,14 @@
         populateYears();
         populateMonths();
 
-     
         yearSelect.addEventListener('change', populateDays);
         monthSelect.addEventListener('change', populateDays);
         calculateBtn.addEventListener('click', startCountdown);
         resetBtn.addEventListener('click', onReset);
 
+        // =====================================================
+        // Enter კლავიშის დაჭერისას Countdown-ის დაწყება
+        // =====================================================
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && countdownContainer.classList.contains('active') === false) {
                 startCountdown();
@@ -589,4 +797,3 @@
     </script>
 </body>
 </html>
-
